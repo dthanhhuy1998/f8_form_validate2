@@ -1,4 +1,7 @@
-function Validator(formSelector, options = {}) {
+function Validator(formSelector) {
+    var _this = this;
+    var formRules = {};
+
     function getParent(element, selector) {
         while(element.parentElement) {
             if(element.parentElement.matches(selector)) {
@@ -7,8 +10,6 @@ function Validator(formSelector, options = {}) {
             element = element.parentElement;
         }
     }
-
-    var formRules = {};
 
     /**
      * Quy ước tạo rule
@@ -81,10 +82,10 @@ function Validator(formSelector, options = {}) {
             var rules = formRules[e.target.name];
             var errorMessage;
 
-            rules.find(function(rule) {
+            for (var rule of rules) {
                 errorMessage = rule(e.target.value);
-                return errorMessage;
-            });
+                if(errorMessage) break;
+            }
 
             // Nếu có lỗi thì hiển thị ra UI
             if(errorMessage) {
@@ -132,7 +133,7 @@ function Validator(formSelector, options = {}) {
 
         // Khi không có lỗi thì submit form
         if(isValid) {
-            if(typeof options.onSubmit === 'function') {
+            if(typeof _this.onSubmit === 'function') {
                 var enableInputs = formElement.querySelectorAll('[name]'); 
                 var formValues = Array.from(enableInputs).reduce(function(values, input) {
                     switch(input.type) {
@@ -162,7 +163,7 @@ function Validator(formSelector, options = {}) {
                 }, {});
 
                 // gọi lại hàm onsubmit và trả kết quả về
-                options.onSubmit(formValues);
+                _this.onSubmit(formValues);
             } else {
                 formElement.submit();
             }

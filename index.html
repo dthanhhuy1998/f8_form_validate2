@@ -39,11 +39,16 @@
     </div>
     <script src="./assets/js/validator.js"></script>
     <script>
-        new Validator('#register-form', {
-            onSubmit: function(data) {
-                console.log(data);
-            }
-        });
+
+      // Không cần lấy data
+      new Validator('#register-form');
+
+      // Khi cần lấy data
+      // var form = new Validator('#register-form');
+
+      // form.onSubmit = function(formData) {
+      //   console.log(formData);
+      // } 
     </script>
 </body>
 </html>
